@@ -31,7 +31,8 @@
         "numeric": "cpp",
         "ostream": "cpp",
         "sstream": "cpp",
-        "i2c.h": "c"
+        "i2c.h": "c",
+        "__config": "cpp"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

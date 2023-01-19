@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <memory>
 
 #include "hardware/uart.h"
 #include "gps.h"
@@ -101,11 +102,21 @@ void beeptest()
 
 // ---------------------------------------------------------------------------------------
 
+std::unique_ptr<PCF8574> g_keyboard4x4 = nullptr;
+
+void keyboardIRQHandler(uint gpio, uint32_t events)
+{
+    if (g_keyboard4x4) {
+            printf("[%02x] ", g_keyboard4x4->getKey4x4() /*g_keyboard4x4->getCharKey4x4()*/);
+    }
+}
+
 void pcftest()
 {
-    PCF8574 pc(i2c1, 2, 3, 0x38);
+    
+    g_keyboard4x4 = std::make_unique<PCF8574>(i2c1, 2, 3, 0x38);
 
-    if (pc.init(false))
+    if (g_keyboard4x4->init(true))
     {
         printf("PCF8574 OK\n");
     }
@@ -116,11 +127,15 @@ void pcftest()
             ;
     }
 
-    while (true)
-    {
-        printf("[%02x %c] ", pc.getKey4x4(), pc.getCharKey4x4());
-        sleep_ms(500);
-    }
+    gpio_set_function(15, GPIO_FUNC_SIO);
+    gpio_set_dir(15, false);
+    gpio_pull_up(15);
+    gpio_set_irq_enabled_with_callback(15, GPIO_IRQ_EDGE_FALL, true, &keyboardIRQHandler);
+
+    // port setting for reading
+    g_keyboard4x4->getKey4x4();
+    
+    while (true) {};
 }
 
 // ---------------------------------------------------------------------------------------
@@ -327,16 +342,20 @@ void timebasetest()
 
 // ---------------------------------------------------------------------------------------
 
+
+// ---------------------------------------------------------------------------------------
+
 int main()
-{
+ {
 
     gps.init();
     stdio_init_all();
-    uart();
+    //uart();
 
     printf("START   ------->\n");
 
-    timeutiltest();
+    pcftest();
+    //timeutiltest();
 
     // DebugUtils::i2cscan(i2c1);
     // ds3231test();
