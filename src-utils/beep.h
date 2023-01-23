@@ -64,9 +64,9 @@ public:
     void off()
     {
         pwm_set_enabled(_slice, false);
-        gpio_init(_pin);
-        gpio_set_dir(_pin, true);
-        gpio_put(_pin, false);
+      //  gpio_init(_pin);
+      //  gpio_set_dir(_pin, true);
+      //  gpio_put(_pin, false);
     }
 
 private:
