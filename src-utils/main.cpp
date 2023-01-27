@@ -92,6 +92,30 @@ void beeptest()
 {
     Beep bp(10);
     bp.init();
+    auto ln = 20;
+    auto d = 300;
+    while(true) {
+        
+        bp.beep(1000);
+        sleep_ms(ln);
+        bp.off();
+        
+                sleep_ms(d);
+
+        bp.beep(300);
+        sleep_ms(ln);
+        bp.off();
+
+         sleep_ms(d);
+
+          bp.beep(300);
+        sleep_ms(ln);
+        bp.off();
+
+         sleep_ms(d);
+
+    }
+
     for (auto i = 330; i < 1000; i++)
     {
         bp.beep(i);
@@ -354,7 +378,8 @@ int main()
 
     printf("START   ------->\n");
 
-    pcftest();
+    //beeptest();
+    // pcftest();
     //timeutiltest();
 
     // DebugUtils::i2cscan(i2c1);

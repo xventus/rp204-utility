@@ -53,8 +53,8 @@ public:
     void beep(uint16_t freq)
     {
         pwm_set_wrap(_slice, (uint)(1000000 / freq));
-        pwm_set_enabled(_slice, true);
         pwm_set_gpio_level(_pin, (uint)((1000000 / freq) / 2));
+        pwm_set_enabled(_slice, true);
     }
 
     /**
@@ -63,10 +63,7 @@ public:
      */
     void off()
     {
-        pwm_set_enabled(_slice, false);
-      //  gpio_init(_pin);
-      //  gpio_set_dir(_pin, true);
-      //  gpio_put(_pin, false);
+         pwm_set_gpio_level(_pin,0);
     }
 
 private:
